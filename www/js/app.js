@@ -7,7 +7,13 @@
 // this line instantiate an angular module called starter and it's injecting
 // ionic and s.c as dependencies for the module
 //
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('stocks', [
+  'ionic',
+  'stocks.controllers',
+  'stocks.services',
+  'stocks.filters',
+  'stocks.directives'
+])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -34,43 +40,25 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
   })
-
-  .state('app.search', {
-    url: '/search',
+  .state('app.myStocks', {
+    url: '/my-stocks',
     views: {
       'menuContent': {
-        templateUrl: 'templates/search.html'
+        templateUrl: 'templates/my-stocks.html',
+        controller: 'MyStocksCtrl'
       }
     }
   })
 
-  .state('app.browse', {
-      url: '/browse',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/browse.html'
-        }
-      }
-    })
-    .state('app.playlists', {
-      url: '/playlists',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/playlists.html',
-          controller: 'PlaylistsCtrl'
-        }
-      }
-    })
-
-  .state('app.single', {
-    url: '/playlists/:playlistId',
+  .state('app.stock', {
+    url: '/:stockTicker',
     views: {
       'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
+        templateUrl: 'templates/stock.html',
+        controller: 'StockCtrl'
       }
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/my-stocks');
 });

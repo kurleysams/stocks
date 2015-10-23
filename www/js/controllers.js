@@ -1,14 +1,21 @@
-angular.module('starter.controllers', [])
+angular.module('stocks.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
-
+  //instantiate a module naming it starter.con...
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-
+  // $scope.playlists = [
+  //   { title: 'Test Value', id: 1 },
+  //   { title: 'Chill', id: 2 },
+  //   { title: 'Dubstep', id: 3 },
+  //   { title: 'Indie', id: 4 },
+  //   { title: 'Rap', id: 5 },
+  //   { title: 'Cowbell', id: 6 }
+  // ];
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -40,17 +47,62 @@ angular.module('starter.controllers', [])
     }, 1000);
   };
 })
+//scope makes your variable available to javascript and html
+.controller('MyStocksCtrl', ['$scope',
+  function($scope) {
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
+    $scope.myStocksArray = [
+      {ticker: "AAPL"},
+      {ticker: "GPRO"},
+      {ticker: "FB"},
+      {ticker: "NFLX"},
+      {ticker: "TSLA"},
+      {ticker: "BRK-A"},
+      {ticker: "INTC"},
+      {ticker: "MSFT"},
+      {ticker: "GE"},
+      {ticker: "BAC"},
+      {ticker: "C"},
+      {ticker: "T"}
+    ];
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-});
+}])
+
+// .controller('StockCtrl', ['$scope', '$stateParams',
+//   function($scope, $stateParams) {
+.controller('StockCtrl', ['$scope', '$stateParams', 'stockDataService', 'dateService',
+  function($scope, $stateParams, stockDataService, dateService) {
+
+    $scope.ticker = $stateParams.stockTicker;
+    $scope.chartView = 1;
+
+    $scope.$on("$ionicView.afterEnter", function() {
+      getPriceData();
+      getDetailsData();
+    });
+
+    $scope.chartViewFunc = function(n) {
+      $scope.chartView = n;
+    };
+
+    function getPriceData() {
+
+      var promise = stockDataService.getPriceData($scope.ticker);
+
+      promise.then(function(data) {
+        $scope.stockPriceData = data;
+      });
+    }
+
+    function getDetailsData() {
+
+      var promise = stockDataService.getDetailsData($scope.ticker);
+
+      promise.then(function(data) {
+        $scope.stockDetailsData = data;
+      });
+    }
+
+}]);
+
+// }]);
